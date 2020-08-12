@@ -3,7 +3,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 const fcm = require('fcm-notification');
 const FCM = new fcm('./frontpanelnotificatons-firebase-adminsdk-2k5zf-dfdccd5abf.json');
-const token = 'fFZyrNDsScKOo7PvaKmxtK:APA91bEq09rcr9e0L13wgjButnBPLpyeBxOzEhkZnnJhKDrwkK2fXOstkX5qL3sl6U7cVhJJ--KL7JvnkmK_TNcWmZvTYSd0iblybTAA3cgT7LJGYi1_Mc8ugOLlAwO806YjkQj2z2GO';
+const tokens = [];
 
 const sendMessage = (title,body)=>{
     
@@ -11,8 +11,8 @@ return message = {
         notification:{
             title : title,
             body : body
-        },
-        token : token
+        }
+
 };
 }
 
@@ -21,7 +21,7 @@ return message = {
 io.on('connection',(socket)=>{
     socket.on('onNewOrder',(data)=>{
         socket.emit('onDatesNewOrder',data)
-        FCM.send(sendMessage('Nueva orden creada','La orden '+data.numOrder+' ha sido creada'), function(err, response) {
+        FCM.sendToMultipleToken(sendMessage('Nueva orden creada','La orden '+data.numOrder+' ha sido creada'),tokens, function(err, response) {
             if(err){
              console.log('error found', err);
             }else {
@@ -68,6 +68,10 @@ io.on('connection',(socket)=>{
     console.log(data)
     socket.emit('onDatesUserDelete'+data,true)
     
+  })
+
+  socket.on('onNewTokenDevice',(value)=>{
+    tokens.push(value)
   })
 })
 
