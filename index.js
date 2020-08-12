@@ -10,7 +10,6 @@ var io = require('socket.io')(http);
 
 
 io.on('connection',(socket)=>{
-  socket.emit('testBackGround',true)
     socket.on('onNewOrder',(data)=>{
         socket.emit('onDatesNewOrder',data)
         
@@ -27,15 +26,12 @@ io.on('connection',(socket)=>{
     })
     
   socket.on('onCompleteTask',(data)=>{
-      console.log(data)
       socket.emit('onDatesCompleteOrder',data)
       
   })
 
   socket.on('onUserDelete',(data)=>{
-    console.log(data)
     socket.emit('onDatesUserDelete'+data,true)
-    
   })
 
   
