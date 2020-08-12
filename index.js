@@ -10,6 +10,7 @@ var io = require('socket.io')(http);
 
 
 io.on('connection',(socket)=>{
+  socket.emit('testBackGround',true)
     socket.on('onNewOrder',(data)=>{
         socket.emit('onDatesNewOrder',data)
         
@@ -37,9 +38,7 @@ io.on('connection',(socket)=>{
     
   })
 
-  socket.on('onNewTokenDevice',(value)=>{
-    tokens.push(value)
-  })
+  
 })
 
 http.listen(3080, () => {
